@@ -61,3 +61,21 @@ git stash pop
 二、发起一个commit存到提交历史
 git add .
 git commit -m "提交的说明"
+
+【多人开发】
+假设源项目的地址是https://gitee.com/didiopensource/DoraemonKit
+一、先在git代码托管平台上fork一份项目，fork后得到以自己命名的远程仓库(https://gitee.com/xie-yuecong/DoraemonKit)
+二、执行git clone https://gitee.com/xie-yuecong/DoraemonKit.git，将自己远程仓库下载到本地(此时默认关联自己的远程仓库)
+三、由于需要从源项目中更新其它同事合并的代码，所以此时需要增加多一个新的远程仓库关联，进入DoraemonKit目录下，执行如下指令：
+git remote add upstream https://gitee.com/didiopensource/DoraemonKit.git
+备注：重新指定地址使用git remote set-url upstream https://gitee.com/didiopensource/DoraemonKit.git
+四、此时查看所有分支，如下
+git branch -a
+* master
+  remotes/origin/HEAD -> origin/master
+  remotes/origin/ios_h5
+  remotes/origin/ios_xcassets
+  remotes/origin/master
+  remotes/upstream/ios_h5
+  remotes/upstream/ios_xcassets
+  remotes/upstream/master
