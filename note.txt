@@ -1,0 +1,63 @@
+工作区-git add->暂存区-git commit->本地仓库-push->远程仓库
+
+【常用操作】
+克隆(clone)：从远程仓库URL加载创建一个与远程仓库一样的本地仓库
+提交(commit)：将暂存文件上传到本地仓库
+检出(checkout)：切换不同分支
+添加（add）：添加文件到缓存区
+重置(reset)：回到最近添加(add)/提交(commit)状态
+拉取(pull)：从远程仓库获取信息并同步至本地仓库，并且自动执行合并（merge）操作，即 pull=fetch+merge
+推送(push)：将本地仓库同步至远程仓库，一般推送（push）前先拉取（pull）一次，确保一致
+状态(status)：查看修改内容，可以再add之前查看下，然后添加要改动的文件到暂存区
+
+【分支管理】
+查看本地分支：git branch(名称前面加* 号的是当前的分支)
+查看远程分支：git branch -a(远程分支会用红色表示出来)
+切换分支：git checkout 分支名
+清理新分支为空分支：git rm -rf .(该操作一般没用到)
+创建分支：git branch 分支名、接着通过git checkout 分支名(切换到本地新建的新分支)、git push --set-upstream origin 分支名(把本地新建的新分支推到git代码托管平台上)
+注意：一般可以直接在git代码托管平台上直接创建分支即可，无需本地操作后再推到git上
+
+将代码暂存在本地：git add .(.指全部的改动，一般来说最好的添加指定的文件，避免有些本地配置的改动也提交到git上)
+给暂存在本地的代码打个tag：git commit -m "这里指提交的说明"
+将本地代码推送到远程指定分支：git push origin <指定的分支名>
+
+【代码提交的流程】
+一、存在冲突的情况
+1）执行git pull，拉取最新代码，如果有冲突，则提示如下：
+remote: Enumerating objects: 5, done.
+remote: Counting objects: 100% (5/5), done.
+remote: Compressing objects: 100% (2/2), done.
+remote: Total 3 (delta 0), reused 0 (delta 0), pack-reused 0
+Unpacking objects: 100% (3/3), done.
+From https://gitee.com/xie-yuecong/first-demo
+   d82dd51..573dc27  dev2       -> origin/dev2
+Updating d82dd51..573dc27
+error: Your local changes to the following files would be overwritten by merge:
+    1.txt
+Please commit your changes or stash them before you merge.
+Aborting
+2）解决冲突
+<a>如果要保存本地修改，则：
+git stash
+git pull origin master
+git stash pop(这一步之后会把文件冲突的地方合并到一起，然后需要打开文件，修改冲突的地方)
+修改冲突后，执行git add .、git commit -m "fixed conflict"、git push即可完成提交
+<b>如果不要保存本地修改，则：
+git reset --hard
+git pull
+二、不存在冲突的情况
+1）执行git pull，没任何报错
+2）git add xxx(添加改动的代码到暂存区)
+3）git commit -m "提交的说明"
+4）git push
+
+【在分支1上开发需求，此时还不想提交分支1的代码，但需要切换到分支2去改bug】
+一、存到暂存区(试验发现，同一时间貌似只能有一个暂存区，即在分支1上暂存后，如果在分支2上也暂存，会把前面暂存的内容给覆盖掉)
+git add .(这个省略)
+git stash
+// 取出的时候使用
+git stash pop
+二、发起一个commit存到提交历史
+git add .
+git commit -m "提交的说明"
